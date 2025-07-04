@@ -182,6 +182,11 @@ void CarAssembler::selectEngine() {
         cout << "Select carEngin: WIA" << endl;
         car->carEngine = make_unique<Wia>();
         break;
+    
+    case BROKEN:
+        cout << "Select carEngin: BROKEN" << endl;
+        car->carEngine = make_unique<Broken>();
+        break;
         
     default:
         cout << "Unknown carEngine" << endl;
@@ -230,12 +235,67 @@ void CarAssembler::selectSteeringSystem() {
     car->carSteer->setSteer();
 }
 
+bool CarAssembler::validationCheck() {
+    int carID = car->carType->getTypeID();
+    int carEngineID = car->carEngine->getEngineID();
+    int carBreakID = car->carBreak->getBreakSystemID();
+    int carSteerID = car->carSteer->getSteerID();
+
+    if (carID == SEDAN && carBreakID == CONTINENTAL) {
+        printf("자동차 부품 조합 테스트 결과 : FAIL\n");
+        printf("Sedan에는 Continental제동장치 사용 불가\n");
+        return false;
+    }
+    else if (carID == SUV && carEngineID == TOYOTA) {
+        printf("자동차 부품 조합 테스트 결과 : FAIL\n");
+        printf("SUV에는 TOYOTA엔진 사용 불가\n");
+        return false;
+    }
+    else if (carID == TRUCK && carEngineID == WIA)
+    {
+        printf("자동차 부품 조합 테스트 결과 : FAIL\n");
+        printf("Truck에는 WIA엔진 사용 불가\n");
+        return false;
+    }
+    else if (carID == TRUCK && carBreakID == MANDO)
+    {
+        printf("자동차 부품 조합 테스트 결과 : FAIL\n");
+        printf("Truck에는 Mando제동장치 사용 불가\n");
+        return false;
+    }
+    else if (carBreakID == BOSCH_B && carSteerID != BOSCH_S)
+    {
+        printf("자동차 부품 조합 테스트 결과 : FAIL\n");
+        printf("Bosch제동장치에는 Bosch조향장치 이외 사용 불가\n");
+        return false;
+    }
+    else
+    {
+        printf("자동차 부품 조합 테스트 결과 : PASS\n");
+        return true;
+    }
+    return true;
+}
+
 void CarAssembler::RunAssembledCar() {
 
+    if (!validationCheck()) {
+        cout << "자동차가 동작하지 않습니다." << endl;
+    }
+    else { 
+        if (car->carEngine->getEngineID() == BROKEN) {
+            printf("엔진이 고장나있습니다.\n");
+            printf("자동차가 움직이지 않습니다.\n");
+        }
+        else {
+            car->PrintCarInfo();
+            cout << "자동차 정상 작동." << endl;
+        }
+    }
 }
 
 void CarAssembler::TestAssembledCar() {
-
+    validationCheck();
 }
 
 void CarAssembler::AssembleCar() {
