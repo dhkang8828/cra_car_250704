@@ -142,6 +142,147 @@ void CarAssembler::printInputHelpMsg() {
     }//switch
 }
 
+void CarAssembler::selectCarType() {
+    switch (answer) { 
+    case SEDAN:
+        cout << "Select carType = Sedan" << endl;
+        car->carType = make_unique<Sedan>();
+        break;
+       
+    case SUV:
+        cout << "Select carType = SUV" << endl;
+        car->carType = make_unique<Suv>();
+        break;
+
+    case TRUCK:
+        cout << "Select carType = Truck" << endl;
+        car->carType = make_unique<Truck>();
+        break;
+
+    default:
+        cout << "Unknown carType" << endl;
+        break;
+    }
+    car->carType->setType();
+}
+
+void CarAssembler::selectEngine() {
+    switch (answer) {
+    case GM:
+        cout << "Select carEngin: GM" << endl;
+        car->carEngine = make_unique<Gm>();
+        break;
+
+    case TOYOTA:
+        cout << "Select carEngin: Toyoya" << endl;
+        car->carEngine = make_unique<Toyota>();
+        break;
+
+    case WIA:
+        cout << "Select carEngin: WIA" << endl;
+        car->carEngine = make_unique<Wia>();
+        break;
+        
+    default:
+        cout << "Unknown carEngine" << endl;
+        break;
+    }
+    car->carEngine->setEngine();
+}
+
+void CarAssembler::selectBreakSystem() {
+    switch (answer) {
+    case MANDO:
+        cout << "Select carBreakSystem: MANDON" << endl;
+        car->carBreak = make_unique<Mando>();
+        break;
+    case CONTINENTAL:
+        cout << "Select carBreakSystem: CONTINENTAL" << endl;
+        car->carBreak = make_unique<Continental>();
+        break;
+    case BOSCH_B:
+        cout << "Select carBreakSystem: BOSCH_B" << endl;
+        car->carBreak = make_unique<Bosch_B>();
+        break;
+    default:
+        cout << "Unknown Break System" << endl;
+        break;
+    }
+    car->carBreak->setBreakSystem();
+}
+
+void CarAssembler::selectSteeringSystem() {
+    switch (answer) {
+    case BOSCH_S:
+        cout << "Select carSteer: BOSCH_S" << endl;
+        car->carSteer = make_unique<Bosch_S>();
+        break;
+
+    case MOBIS:
+        cout << "Select carSteer: MOBIS" << endl;
+        car->carSteer = make_unique<Mobis>();
+        break;
+
+    default:
+        cout << "Unknown carSteer " << endl;
+        break;
+    }
+    car->carSteer->setSteer();
+}
+
+void CarAssembler::RunAssembledCar() {
+
+}
+
+void CarAssembler::TestAssembledCar() {
+
+}
+
+void CarAssembler::AssembleCar() {
+    switch (step) {
+    case CarType_Q:
+        selectCarType();
+        delay(800);
+        step = Engine_Q;
+        break;
+
+    case Engine_Q:
+        selectEngine();
+        delay(800);
+        step = brakeSystem_Q;
+        break;
+
+    case brakeSystem_Q:
+        selectBreakSystem();
+        delay(800);
+        step = SteeringSystem_Q;
+        break;
+
+    case SteeringSystem_Q:
+        selectSteeringSystem();
+        delay(800);
+        step = Run_Test;
+        break;
+
+    case Run_Test:
+        if (answer == 1) {
+            RunAssembledCar();
+            delay(2000);
+        }
+        else if (answer == 2) {
+            printf("Test...\n");
+            delay(1500);
+            TestAssembledCar();
+            delay(2000);
+        }
+        break;
+
+    default:
+        printf("Unknown step.");
+        break;
+    }//switch
+}
+
 void CarAssembler::doAssemble() {
     char buf[100];
     this->step = CarType_Q;
@@ -180,7 +321,6 @@ void CarAssembler::doAssemble() {
             step -= 1;
             continue;
         }
-
-        //doAssemble(&step, answer);
+        AssembleCar();
     }
 }

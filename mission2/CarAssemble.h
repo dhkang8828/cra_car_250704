@@ -40,7 +40,7 @@ protected:
 	string engine;
 };
 
-class GM : public IEngine {
+class Gm : public IEngine {
 public:
 	void setEngine() override { this->engine = "GM"; }
 	string getEngine() override { return this->engine; }
@@ -52,7 +52,7 @@ public:
 	string getEngine() override { return this->engine; }
 };
 
-class WIA : public IEngine {
+class Wia : public IEngine {
 public:
 	void setEngine() override { this->engine = "WIA"; }
 	string getEngine() override { return this->engine; }
@@ -125,12 +125,24 @@ public:
 class CarAssembler
 {
 public:
-	CarAssembler() : step(0), answer(0) {}
+	CarAssembler() : step(0), answer(0) {
+		car = make_unique<Car>();
+	}
 	void printMenu();
 	int CheckInputException();
 	void doAssemble(); 
 	bool isValidInput();
 	void printInputHelpMsg();
+	
+	void AssembleCar();
+	void selectCarType();
+	void selectEngine();
+	void selectBreakSystem();
+	void selectSteeringSystem();
+	void RunAssembledCar();
+	void TestAssembledCar();
+	
+	unique_ptr<Car> car;
 	int step;
 	int answer;
 };
