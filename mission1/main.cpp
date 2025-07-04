@@ -168,6 +168,93 @@ int CheckInputException(void) {
     
 }
 
+bool isValidInput(int step, int answer) {
+    switch (step) {
+    case CarType_Q:
+        return answer >= 1 && answer <= 3;
+    case Engine_Q:
+        return answer >= 0 && answer <= 4;
+    case brakeSystem_Q: 
+        return answer >= 0 && answer <= 3;
+    case SteeringSystem_Q: 
+        return answer >= 0 && answer <= 2;
+    case Run_Test: 
+        return answer >= 0 && answer <= 2;
+    default:
+        return false;
+    }//switch
+}
+
+void printInputHelpMsg(int step) {
+    switch (step) {
+    case CarType_Q:
+        printf("ERROR :: 차량 타입은 1 ~ 3 범위만 선택 가능\n");
+        break;
+    case Engine_Q:
+        printf("ERROR :: 엔진은 1 ~ 4 범위만 선택 가능\n");
+        break;
+    case brakeSystem_Q:
+        printf("ERROR :: 제동장치는 1 ~ 3 범위만 선택 가능\n");
+        break;
+    case SteeringSystem_Q:
+        printf("ERROR :: 조향장치는 1 ~ 2 범위만 선택 가능\n");
+        break;
+    case Run_Test:
+        printf("ERROR :: Run 또는 Test 중 하나를 선택 필요\n");
+        break;
+    default:
+        printf("Unexpected step.");
+        break;
+    }//switch
+}
+
+void doAssemble(int *step, int answer) {
+
+    switch (*step) {
+    case CarType_Q:
+        selectCarType(answer);
+        delay(800);
+        *step = Engine_Q;
+        break;
+
+    case Engine_Q:
+        selectEngine(answer);
+        delay(800);
+        *step = brakeSystem_Q;
+        break;
+        
+    case brakeSystem_Q:
+        selectbrakeSystem(answer);
+        delay(800);
+        *step = SteeringSystem_Q;
+        break;
+
+    case SteeringSystem_Q:
+        selectSteeringSystem(answer);
+        delay(800);
+        *step = Run_Test;
+        break;
+
+    case Run_Test:
+        if (answer == 1) {
+            runProducedCar();
+            delay(2000);
+        }
+        else if (answer == 2) {
+            printf("Test...\n");
+            delay(1500);
+            testProducedCar();
+            delay(2000);
+        }
+        break;
+
+    default:
+        printf("Unknown step.");
+        break;
+    }//switch
+    
+}
+
 int main()
 {
     char buf[100];
@@ -188,37 +275,8 @@ int main()
             continue;
         }
 
-        if (step == CarType_Q && !(answer >= 1 && answer <= 3))
-        {
-            printf("ERROR :: 차량 타입은 1 ~ 3 범위만 선택 가능\n");
-            delay(800);
-            continue;
-        }
-
-        if (step == Engine_Q && !(answer >= 0 && answer <= 4))
-        {
-            printf("ERROR :: 엔진은 1 ~ 4 범위만 선택 가능\n");
-            delay(800);
-            continue;
-        }
-
-        if (step == brakeSystem_Q && !(answer >= 0 && answer <= 3))
-        {
-            printf("ERROR :: 제동장치는 1 ~ 3 범위만 선택 가능\n");
-            delay(800);
-            continue;
-        }
-
-        if (step == SteeringSystem_Q && !(answer >= 0 && answer <= 2))
-        {
-            printf("ERROR :: 조향장치는 1 ~ 2 범위만 선택 가능\n");
-            delay(800);
-            continue;
-        }
-
-        if (step == Run_Test && !(answer >= 0 && answer <= 2))
-        {
-            printf("ERROR :: Run 또는 Test 중 하나를 선택 필요\n");
+        if (!isValidInput(step, answer)) {
+            printInputHelpMsg(step);
             delay(800);
             continue;
         }
@@ -237,42 +295,7 @@ int main()
             continue;
         }
 
-        if (step == CarType_Q)
-        {
-            selectCarType(answer);
-            delay(800);
-            step = Engine_Q;
-        }
-        else if (step == Engine_Q)
-        {
-            selectEngine(answer);
-            delay(800);
-            step = brakeSystem_Q;
-        }
-        else if (step == brakeSystem_Q)
-        {
-            selectbrakeSystem(answer);
-            delay(800);
-            step = SteeringSystem_Q;
-        }
-        else if (step == SteeringSystem_Q)
-        {
-            selectSteeringSystem(answer);
-            delay(800);
-            step = Run_Test;
-        }
-        else if (step == Run_Test && answer == 1)
-        {
-            runProducedCar();
-            delay(2000);
-        }
-        else if (step == Run_Test && answer == 2)
-        {
-            printf("Test...\n");
-            delay(1500);
-            testProducedCar();
-            delay(2000);
-        }
+        doAssemble(&step, answer);
     }
 }
 
