@@ -2,6 +2,7 @@
 #ifdef _DEBUG
 
 #include "gmock/gmock.h"
+#include "CarAssemble.h"
 
 int main()
 {
