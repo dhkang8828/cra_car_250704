@@ -26,6 +26,11 @@ void runProducedCar();
 void testProducedCar();
 void delay(int ms);
 
+enum FLOW_CONTROL {
+    LOOP_BREAK = -1,
+    LOOP_CONTINUE = -2,
+};
+
 enum QuestionType
 {
     CarType_Q,
@@ -77,90 +82,109 @@ void delay(int ms)
     }
 }
 
+void printMenu(int step) {
+    printf(CLEAR_SCREEN);
+    switch (step) {
+    
+    case CarType_Q:
+        printf("        ______________\n");
+        printf("       /|            | \n");
+        printf("  ____/_|_____________|____\n");
+        printf(" |                      O  |\n");
+        printf(" '-(@)----------------(@)--'\n");
+        printf("===============================\n");
+        printf("어떤 차량 타입을 선택할까요?\n");
+        printf("1. Sedan\n");
+        printf("2. SUV\n");
+        printf("3. Truck\n");
+        break;
+
+    case Engine_Q:
+        printf("어떤 엔진을 탑재할까요?\n");
+        printf("0. 뒤로가기\n");
+        printf("1. GM\n");
+        printf("2. TOYOTA\n");
+        printf("3. WIA\n");
+        printf("4. 고장난 엔진\n");
+        break;
+
+    case brakeSystem_Q:
+        printf("어떤 제동장치를 선택할까요?\n");
+        printf("0. 뒤로가기\n");
+        printf("1. MANDO\n");
+        printf("2. CONTINENTAL\n");
+        printf("3. BOSCH\n");
+        break;
+
+    case SteeringSystem_Q:
+        printf("어떤 조향장치를 선택할까요?\n");
+        printf("0. 뒤로가기\n");
+        printf("1. BOSCH\n");
+        printf("2. MOBIS\n");
+        break;
+
+    case Run_Test:
+        printf("멋진 차량이 완성되었습니다.\n");
+        printf("어떤 동작을 할까요?\n");
+        printf("0. 처음 화면으로 돌아가기\n");
+        printf("1. RUN\n");
+        printf("2. Test\n");
+        break;
+
+    default:
+        printf("Unknown Step");
+        break;
+    }//switch
+}
+
+int CheckInputException(void) {
+    char buf[128] = {0, };
+    fgets(buf, sizeof(buf), stdin);
+
+    // 엔터 개행문자 제거
+    char* context = nullptr;
+    strtok_s(buf, "\r", &context);
+    strtok_s(buf, "\n", &context);
+
+    if (!strcmp(buf, "exit"))
+    {
+        printf("바이바이\n");
+        return LOOP_BREAK;
+    }
+
+    // 숫자로 된 대답인지 확인
+    char* checkNumber;
+    int answer = strtol(buf, &checkNumber, 10); // 문자열을 10진수로 변환
+
+    // 입력받은 문자가 숫자가 아니라면
+    if (*checkNumber != '\0')
+    {
+        printf("ERROR :: 숫자만 입력 가능\n");
+        delay(800);
+        return LOOP_CONTINUE;
+    }
+
+    return answer;
+    
+}
+
 int main()
 {
     char buf[100];
     int step = CarType_Q;
+    int answer = 0;
 
     while (1)
     {
-
-        if (step == CarType_Q)
-        {
-            printf(CLEAR_SCREEN);
-
-            printf("        ______________\n");
-            printf("       /|            | \n");
-            printf("  ____/_|_____________|____\n");
-            printf(" |                      O  |\n");
-            printf(" '-(@)----------------(@)--'\n");
-            printf("===============================\n");
-            printf("어떤 차량 타입을 선택할까요?\n");
-            printf("1. Sedan\n");
-            printf("2. SUV\n");
-            printf("3. Truck\n");
-        }
-        else if (step == Engine_Q)
-        {
-            printf(CLEAR_SCREEN);
-            printf("어떤 엔진을 탑재할까요?\n");
-            printf("0. 뒤로가기\n");
-            printf("1. GM\n");
-            printf("2. TOYOTA\n");
-            printf("3. WIA\n");
-            printf("4. 고장난 엔진\n");
-        }
-        else if (step == brakeSystem_Q)
-        {
-            printf(CLEAR_SCREEN);
-            printf("어떤 제동장치를 선택할까요?\n");
-            printf("0. 뒤로가기\n");
-            printf("1. MANDO\n");
-            printf("2. CONTINENTAL\n");
-            printf("3. BOSCH\n");
-        }
-        else if (step == SteeringSystem_Q)
-        {
-            printf(CLEAR_SCREEN);
-            printf("어떤 조향장치를 선택할까요?\n");
-            printf("0. 뒤로가기\n");
-            printf("1. BOSCH\n");
-            printf("2. MOBIS\n");
-        }
-        else if (step == Run_Test)
-        {
-            printf(CLEAR_SCREEN);
-            printf("멋진 차량이 완성되었습니다.\n");
-            printf("어떤 동작을 할까요?\n");
-            printf("0. 처음 화면으로 돌아가기\n");
-            printf("1. RUN\n");
-            printf("2. Test\n");
-        }
+        printMenu(step);
         printf("===============================\n");
 
         printf("INPUT > ");
-        fgets(buf, sizeof(buf), stdin);
-
-        // 엔터 개행문자 제거
-        char* context = nullptr;
-        strtok_s(buf, "\r", &context);
-        strtok_s(buf, "\n", &context);
-
-        if (!strcmp(buf, "exit"))
-        {
-            printf("바이바이\n");
+        answer = CheckInputException();
+        if (answer == LOOP_BREAK) {
             break;
         }
-
-        // 숫자로 된 대답인지 확인
-        char* checkNumber;
-        int answer = strtol(buf, &checkNumber, 10); // 문자열을 10진수로 변환
-
-        // 입력받은 문자가 숫자가 아니라면
-        if (*checkNumber != '\0')
-        {
-            printf("ERROR :: 숫자만 입력 가능\n");
-            delay(800);
+        else if (answer == LOOP_CONTINUE) {
             continue;
         }
 
