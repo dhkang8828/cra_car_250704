@@ -5,6 +5,12 @@ enum FLOW_CONTROL {
     LOOP_CONTINUE = -2,
 };
 
+enum TestResult {
+    TEST_PASS,
+    TEST_FAIL,
+    TEST_ERROR,
+};
+
 enum QuestionType
 {
     CarType_Q,

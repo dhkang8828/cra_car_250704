@@ -148,11 +148,33 @@ public:
 	}
 };
 
+class IUserInput {
+public:
+	virtual char* getInput() = 0;
+	virtual ~IUserInput() = default;
+};
+
+class ConsoleInput : public IUserInput {
+public:
+	char* getInput() override {
+		char buf[128] = { 0, };
+		fgets(buf, sizeof(buf), stdin);
+		return buf;
+	}
+};
+
 class CarAssembler
 {
 public:
 	CarAssembler() : step(0), answer(0) {
+		testResult = TEST_FAIL;
 		car = make_unique<Car>();
+		input = new ConsoleInput;
+	}
+	CarAssembler(IUserInput *_input) : step(0), answer(0) {
+		testResult = TEST_FAIL;
+		car = make_unique<Car>();
+		input = _input;
 	}
 	void printMenu();
 	int CheckInputException();
@@ -168,9 +190,14 @@ public:
 	bool validationCheck();
 	void RunAssembledCar();
 	void TestAssembledCar();
+	int GetTestResult() { return this->testResult; }
 	
 	unique_ptr<Car> car;
+	IUserInput* input;
 	int step;
 	int answer;
+	int testResult;
 };
+
+
 

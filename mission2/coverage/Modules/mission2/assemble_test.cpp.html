@@ -1,0 +1,314 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+        <meta charset="utf-8"/>
+	    <title>assemble_test.cpp</title>
+	    <link href="../../third-party/google-code-prettify/prettify-CppCoverage.css" type="text/css" rel="stylesheet" />
+	    <script type="text/javascript" src="../../third-party/google-code-prettify/prettify.js"></script>
+	</head>
+    <body onload="prettyPrint()">
+        <h4></h4>
+        <pre class="prettyprint lang-cpp linenums">
+#include "gmock/gmock.h"
+#include "CarAssemble.h"
+#include &lt;iostream&gt;
+
+class CarPartsTest : public ::testing::Test {
+    CarAssembler assembler;
+};
+
+class MockUserInput : public IUserInput {
+public:
+<span style = "background-color:#dfd">    MOCK_METHOD(char*, getInput, (), (override));</span>
+};
+
+class CarAssembleTest : public ::testing::Test {
+protected:
+    MockUserInput mockInput;
+    CarAssembler* assembler;
+
+<span style = "background-color:#dfd">    void SetUp() override {
+        assembler = new CarAssembler(&amp;mockInput);
+    }</span>
+
+<span style = "background-color:#dfd">    void TearDown() override {
+        delete assembler;
+    }</span>
+};
+
+// CarType Å×½ºÆ®
+<span style = "background-color:#dfd">TEST_F(CarPartsTest, CarTypeSetAndGet) {
+    Sedan sedan;
+    sedan.setType();
+    EXPECT_EQ(sedan.getType(), "SEDAN");
+    EXPECT_EQ(sedan.getTypeID(), SEDAN);</span>
+
+<span style = "background-color:#dfd">    Suv suv;
+    suv.setType();
+    EXPECT_EQ(suv.getType(), "SUV");
+    EXPECT_EQ(suv.getTypeID(), SUV);</span>
+
+<span style = "background-color:#dfd">    Truck truck;
+    truck.setType();
+    EXPECT_EQ(truck.getType(), "TRUCK");
+    EXPECT_EQ(truck.getTypeID(), TRUCK);
+}</span>
+
+// Engine Å×½ºÆ®
+<span style = "background-color:#dfd">TEST_F(CarPartsTest, EngineSetAndGet) {
+    Gm gm;
+    gm.setEngine();
+    EXPECT_EQ(gm.getEngine(), "GM");
+    EXPECT_EQ(gm.getEngineID(), GM);</span>
+
+<span style = "background-color:#dfd">    Toyota toyota;
+    toyota.setEngine();
+    EXPECT_EQ(toyota.getEngine(), "TOYOTA");
+    EXPECT_EQ(toyota.getEngineID(), TOYOTA);</span>
+
+<span style = "background-color:#dfd">    Wia wia;
+    wia.setEngine();
+    EXPECT_EQ(wia.getEngine(), "WIA");
+    EXPECT_EQ(wia.getEngineID(), WIA);</span>
+
+<span style = "background-color:#dfd">    Broken broken;
+    broken.setEngine();
+    EXPECT_EQ(broken.getEngine(), "BROKEN");
+    EXPECT_EQ(broken.getEngineID(), BROKEN);
+}</span>
+
+// BreakSystem Å×½ºÆ®
+<span style = "background-color:#dfd">TEST_F(CarPartsTest, BreakSystemSetAndGet) {
+    Mando mando;
+    mando.setBreakSystem();
+    EXPECT_EQ(mando.getBreakSystem(), "MANDO");
+    EXPECT_EQ(mando.getBreakSystemID(), MANDO);</span>
+    
+<span style = "background-color:#dfd">    Continental continental;
+    continental.setBreakSystem();
+    EXPECT_EQ(continental.getBreakSystem(), "CONTINENTAL");
+    EXPECT_EQ(continental.getBreakSystemID(), CONTINENTAL);</span>
+
+<span style = "background-color:#dfd">    Bosch_B bosch;
+    bosch.setBreakSystem();
+    EXPECT_EQ(bosch.getBreakSystem(), "BOSCH_B");
+    EXPECT_EQ(bosch.getBreakSystemID(), BOSCH_B);
+}</span>
+
+// SteeringSystem Å×½ºÆ®
+<span style = "background-color:#dfd">TEST_F(CarPartsTest, SteeringSystemSetAndGet) {
+    Bosch_S bosch;
+    bosch.setSteer();
+    EXPECT_EQ(bosch.getSteer(), "BOSCH_S");
+    EXPECT_EQ(bosch.getSteerID(), BOSCH_S);</span>
+
+<span style = "background-color:#dfd">    Mobis mobis;
+    mobis.setSteer();
+    EXPECT_EQ(mobis.getSteer(), "MOBIS");
+    EXPECT_EQ(mobis.getSteerID(), MOBIS);
+}</span>
+
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTest, RunTestTC1) {</span>
+    
+<span style = "background-color:#dfd">    EXPECT_CALL(mockInput, getInput())</span>
+        .Times(6)
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("exit")));
+       
+<span style = "background-color:#dfd">    CarAssembler assembler(&amp;mockInput);
+    assembler.doAssemble();
+    int testResult = assembler.GetTestResult();
+    EXPECT_EQ(testResult, TEST_PASS);</span>
+    
+<span style = "background-color:#dfd">}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTest, RunTestTC2) {</span>
+
+<span style = "background-color:#dfd">    EXPECT_CALL(mockInput, getInput())</span>
+        .Times(6)
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Type: Sedan, SUV, TRUCK
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Engine: GM, TOYOTA, WIA, BROKEN
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Break: MANDO, CONTINENTAL, BOSHC_B
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("2")))    //Steer:: BOSHC_S, MOBIS
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Test Run: RUN, Test
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("exit")));
+
+<span style = "background-color:#dfd">    CarAssembler assembler(&amp;mockInput);
+    assembler.doAssemble();
+    int testResult = assembler.GetTestResult();
+    EXPECT_EQ(testResult, TEST_PASS);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTest, RunTestTC3) {</span>
+
+<span style = "background-color:#dfd">    EXPECT_CALL(mockInput, getInput())</span>
+        .Times(6)
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Type: Sedan, SUV, TRUCK
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Engine: GM, TOYOTA, WIA, BROKEN
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("2")))    //Break: MANDO, CONTINENTAL, BOSHC_B
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Steer:: BOSHC_S, MOBIS
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Test Run: RUN, Test
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("exit")));
+
+<span style = "background-color:#dfd">    CarAssembler assembler(&amp;mockInput);
+    assembler.doAssemble();
+    int testResult = assembler.GetTestResult();
+    EXPECT_EQ(testResult, TEST_FAIL);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTest, RunTestTC4) {</span>
+
+<span style = "background-color:#dfd">    EXPECT_CALL(mockInput, getInput())</span>
+        .Times(6)
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Type: Sedan, SUV, TRUCK
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Engine: GM, TOYOTA, WIA, BROKEN
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("2")))    //Break: MANDO, CONTINENTAL, BOSHC_B
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("2")))    //Steer:: BOSHC_S, MOBIS
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Test Run: RUN, Test
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("exit")));
+
+<span style = "background-color:#dfd">    CarAssembler assembler(&amp;mockInput);
+    assembler.doAssemble();
+    int testResult = assembler.GetTestResult();
+    EXPECT_EQ(testResult, TEST_FAIL);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTest, RunTestTC5) {</span>
+
+<span style = "background-color:#dfd">    EXPECT_CALL(mockInput, getInput())</span>
+        .Times(6)
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Type: Sedan, SUV, TRUCK
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Engine: GM, TOYOTA, WIA, BROKEN
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("3")))    //Break: MANDO, CONTINENTAL, BOSHC_B
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Steer:: BOSHC_S, MOBIS
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Test Run: RUN, Test
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("exit")));
+
+<span style = "background-color:#dfd">    CarAssembler assembler(&amp;mockInput);
+    assembler.doAssemble();
+    int testResult = assembler.GetTestResult();
+    EXPECT_EQ(testResult, TEST_PASS);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTest, RunTestTC6) {</span>
+
+<span style = "background-color:#dfd">    EXPECT_CALL(mockInput, getInput())</span>
+        .Times(6)
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Type: Sedan, SUV, TRUCK
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Engine: GM, TOYOTA, WIA, BROKEN
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("3")))    //Break: MANDO, CONTINENTAL, BOSHC_B
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("2")))    //Steer:: BOSHC_S, MOBIS
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Test Run: RUN, Test
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("exit")));
+
+<span style = "background-color:#dfd">    CarAssembler assembler(&amp;mockInput);
+    assembler.doAssemble();
+    int testResult = assembler.GetTestResult();
+    EXPECT_EQ(testResult, TEST_FAIL);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTest, RunTestTC7) {</span>
+
+<span style = "background-color:#dfd">    EXPECT_CALL(mockInput, getInput())</span>
+        .Times(6)
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Type: Sedan, SUV, TRUCK
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("2")))    //Engine: GM, TOYOTA, WIA, BROKEN
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Break: MANDO, CONTINENTAL, BOSHC_B
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Steer:: BOSHC_S, MOBIS
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Test Run: RUN, Test
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("exit")));
+
+<span style = "background-color:#dfd">    CarAssembler assembler(&amp;mockInput);
+    assembler.doAssemble();
+    int testResult = assembler.GetTestResult();
+    EXPECT_EQ(testResult, TEST_PASS);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTest, RunTestTC8) {</span>
+
+<span style = "background-color:#dfd">    EXPECT_CALL(mockInput, getInput())</span>
+        .Times(6)
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("2")))    //Type: Sedan, SUV, TRUCK
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("2")))    //Engine: GM, TOYOTA, WIA, BROKEN
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Break: MANDO, CONTINENTAL, BOSHC_B
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Steer:: BOSHC_S, MOBIS
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Test Run: RUN, Test
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("exit")));
+
+<span style = "background-color:#dfd">    CarAssembler assembler(&amp;mockInput);
+    assembler.doAssemble();
+    int testResult = assembler.GetTestResult();
+    EXPECT_EQ(testResult, TEST_FAIL);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTest, RunTestTC9) {</span>
+
+<span style = "background-color:#dfd">    EXPECT_CALL(mockInput, getInput())</span>
+        .Times(6)
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("3")))    //Type: Sedan, SUV, TRUCK
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("3")))    //Engine: GM, TOYOTA, WIA, BROKEN
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Break: MANDO, CONTINENTAL, BOSHC_B
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Steer:: BOSHC_S, MOBIS
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Test Run: RUN, Test
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("exit")));
+
+<span style = "background-color:#dfd">    CarAssembler assembler(&amp;mockInput);
+    assembler.doAssemble();
+    int testResult = assembler.GetTestResult();
+    EXPECT_EQ(testResult, TEST_FAIL);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTest, RunTestTC10) {</span>
+
+<span style = "background-color:#dfd">    EXPECT_CALL(mockInput, getInput())</span>
+        .Times(6)
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("3")))    //Type: Sedan, SUV, TRUCK
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Engine: GM, TOYOTA, WIA, BROKEN
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Break: MANDO, CONTINENTAL, BOSHC_B
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Steer:: BOSHC_S, MOBIS
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Test Run: RUN, Test
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("exit")));
+
+<span style = "background-color:#dfd">    CarAssembler assembler(&amp;mockInput);
+    assembler.doAssemble();
+    int testResult = assembler.GetTestResult();
+    EXPECT_EQ(testResult, TEST_FAIL);
+}</span>
+
+<span style = "background-color:#dfd">TEST_F(CarAssembleTest, RunTestTC11) {</span>
+
+<span style = "background-color:#dfd">    EXPECT_CALL(mockInput, getInput())</span>
+        .Times(6)
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Type: Sedan, SUV, TRUCK
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Engine: GM, TOYOTA, WIA, BROKEN
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Break: MANDO, CONTINENTAL, BOSHC_B
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("1")))    //Steer:: BOSHC_S, MOBIS
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("2")))    //Test Run: RUN, Test
+        .WillOnce(::testing::Return(const_cast&lt;char*&gt;("exit")));
+
+<span style = "background-color:#dfd">    CarAssembler assembler(&amp;mockInput);
+    assembler.doAssemble();
+    int testResult = assembler.GetTestResult();
+    EXPECT_EQ(testResult, TEST_PASS);
+}</span>
+</pre>
+        <hr />
+        <table width="100%">
+            <thead>
+                <tr>
+                    <th align="center">
+                        <small>Generated by</small>
+                        <a href="https://github.com/OpenCppCoverage/OpenCppCoverage/releases">
+                            <strong>OpenCppCoverage (Version: 0.9.9.0)</strong>
+                        </a>
+                    </th>
+                </tr>
+            </thead>
+        </table>
+    </body>
+</html>

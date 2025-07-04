@@ -18,8 +18,8 @@ static void delay(int ms)
 }
 
 int CarAssembler::CheckInputException() {
-    char buf[128] = { 0, };
-    fgets(buf, sizeof(buf), stdin);
+    char buf[64] = { 0, };
+    strcpy_s(buf, sizeof(buf), input->getInput());
 
     // 엔터 개행문자 제거
     char* context = nullptr;
@@ -136,9 +136,6 @@ void CarAssembler::printInputHelpMsg() {
     case Run_Test:
         printf("ERROR :: Run 또는 Test 중 하나를 선택 필요\n");
         break;
-    default:
-        printf("Unexpected step.");
-        break;
     }//switch
 }
 
@@ -157,10 +154,6 @@ void CarAssembler::selectCarType() {
     case TRUCK:
         cout << "Select carType = Truck" << endl;
         car->carType = make_unique<Truck>();
-        break;
-
-    default:
-        cout << "Unknown carType" << endl;
         break;
     }
     car->carType->setType();
@@ -187,10 +180,7 @@ void CarAssembler::selectEngine() {
         cout << "Select carEngin: BROKEN" << endl;
         car->carEngine = make_unique<Broken>();
         break;
-        
-    default:
-        cout << "Unknown carEngine" << endl;
-        break;
+     
     }
     car->carEngine->setEngine();
 }
@@ -209,9 +199,6 @@ void CarAssembler::selectBreakSystem() {
         cout << "Select carBreakSystem: BOSCH_B" << endl;
         car->carBreak = make_unique<Bosch_B>();
         break;
-    default:
-        cout << "Unknown Break System" << endl;
-        break;
     }
     car->carBreak->setBreakSystem();
 }
@@ -226,10 +213,6 @@ void CarAssembler::selectSteeringSystem() {
     case MOBIS:
         cout << "Select carSteer: MOBIS" << endl;
         car->carSteer = make_unique<Mobis>();
-        break;
-
-    default:
-        cout << "Unknown carSteer " << endl;
         break;
     }
     car->carSteer->setSteer();
@@ -271,6 +254,7 @@ bool CarAssembler::validationCheck() {
     }
     else
     {
+        testResult = TEST_PASS;
         printf("자동차 부품 조합 테스트 결과 : PASS\n");
         return true;
     }
@@ -281,15 +265,18 @@ void CarAssembler::RunAssembledCar() {
 
     if (!validationCheck()) {
         cout << "자동차가 동작하지 않습니다." << endl;
+        testResult = TEST_FAIL;
     }
     else { 
         if (car->carEngine->getEngineID() == BROKEN) {
             printf("엔진이 고장나있습니다.\n");
             printf("자동차가 움직이지 않습니다.\n");
+            testResult = TEST_FAIL;
         }
         else {
             car->PrintCarInfo();
             cout << "자동차 정상 작동." << endl;
+            testResult = TEST_PASS;
         }
     }
 }
