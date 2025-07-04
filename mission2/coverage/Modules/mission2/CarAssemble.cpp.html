@@ -50,7 +50,7 @@ static void delay(int ms)
     // ÀÔ·Â¹ÞÀº ¹®ÀÚ°¡ ¼ýÀÚ°¡ ¾Æ´Ï¶ó¸é
 <span style = "background-color:#dfd">    if (*checkNumber != '\0')</span>
     {
-<span style = "background-color:#fdd">        printf("ERROR :: ¼ýÀÚ¸¸ ÀÔ·Â °¡´É\n");
+<span style = "background-color:#dfd">        printf("ERROR :: ¼ýÀÚ¸¸ ÀÔ·Â °¡´É\n");
         delay(800);
         return LOOP_CONTINUE;</span>
     }
@@ -104,11 +104,7 @@ static void delay(int ms)
         printf("¾î¶² µ¿ÀÛÀ» ÇÒ±î¿ä?\n");
         printf("0. Ã³À½ È­¸éÀ¸·Î µ¹¾Æ°¡±â\n");
         printf("1. RUN\n");
-        printf("2. Test\n");
-        break;</span>
-
-    default:
-<span style = "background-color:#fdd">        printf("Unknown Step");</span>
+        printf("2. Test\n");</span>
         break;
     }//switch
 <span style = "background-color:#dfd">}</span>
@@ -125,30 +121,28 @@ static void delay(int ms)
 <span style = "background-color:#dfd">        return answer &gt;= 0 &amp;&amp; answer &lt;= 2;</span>
     case Run_Test:
 <span style = "background-color:#dfd">        return answer &gt;= 0 &amp;&amp; answer &lt;= 2;</span>
-    default:
-<span style = "background-color:#fdd">        return false;</span>
     }//switch
 <span style = "background-color:#dfd">}</span>
 
-<span style = "background-color:#fdd">void CarAssembler::printInputHelpMsg() {
+<span style = "background-color:#dfd">void CarAssembler::printInputHelpMsg() {
     switch (step) {</span>
     case CarType_Q:
-<span style = "background-color:#fdd">        printf("ERROR :: Â÷·® Å¸ÀÔÀº 1 ~ 3 ¹üÀ§¸¸ ¼±ÅÃ °¡´É\n");
+<span style = "background-color:#dfd">        printf("ERROR :: Â÷·® Å¸ÀÔÀº 1 ~ 3 ¹üÀ§¸¸ ¼±ÅÃ °¡´É\n");
         break;</span>
     case Engine_Q:
-<span style = "background-color:#fdd">        printf("ERROR :: ¿£ÁøÀº 1 ~ 4 ¹üÀ§¸¸ ¼±ÅÃ °¡´É\n");
+<span style = "background-color:#dfd">        printf("ERROR :: ¿£ÁøÀº 1 ~ 4 ¹üÀ§¸¸ ¼±ÅÃ °¡´É\n");
         break;</span>
     case brakeSystem_Q:
-<span style = "background-color:#fdd">        printf("ERROR :: Á¦µ¿ÀåÄ¡´Â 1 ~ 3 ¹üÀ§¸¸ ¼±ÅÃ °¡´É\n");
+<span style = "background-color:#dfd">        printf("ERROR :: Á¦µ¿ÀåÄ¡´Â 1 ~ 3 ¹üÀ§¸¸ ¼±ÅÃ °¡´É\n");
         break;</span>
     case SteeringSystem_Q:
-<span style = "background-color:#fdd">        printf("ERROR :: Á¶ÇâÀåÄ¡´Â 1 ~ 2 ¹üÀ§¸¸ ¼±ÅÃ °¡´É\n");
+<span style = "background-color:#dfd">        printf("ERROR :: Á¶ÇâÀåÄ¡´Â 1 ~ 2 ¹üÀ§¸¸ ¼±ÅÃ °¡´É\n");
         break;</span>
     case Run_Test:
-<span style = "background-color:#fdd">        printf("ERROR :: Run ¶Ç´Â Test Áß ÇÏ³ª¸¦ ¼±ÅÃ ÇÊ¿ä\n");</span>
+<span style = "background-color:#dfd">        printf("ERROR :: Run ¶Ç´Â Test Áß ÇÏ³ª¸¦ ¼±ÅÃ ÇÊ¿ä\n");</span>
         break;
     }//switch
-<span style = "background-color:#fdd">}</span>
+<span style = "background-color:#dfd">}</span>
 
 <span style = "background-color:#dfd">void CarAssembler::selectCarType() {
     switch (answer) { </span>
@@ -188,7 +182,7 @@ static void delay(int ms)
         break;</span>
     
     case BROKEN:
-<span style = "background-color:#fdd">        cout &lt;&lt; "Select carEngin: BROKEN" &lt;&lt; endl;
+<span style = "background-color:#dfd">        cout &lt;&lt; "Select carEngin: BROKEN" &lt;&lt; endl;
         car-&gt;carEngine = make_unique&lt;Broken&gt;();</span>
         break;
      
@@ -269,7 +263,6 @@ static void delay(int ms)
         printf("ÀÚµ¿Â÷ ºÎÇ° Á¶ÇÕ Å×½ºÆ® °á°ú : PASS\n");
         return true;</span>
     }
-<span style = "background-color:#fdd">    return true;</span>
 <span style = "background-color:#dfd">}</span>
 
 <span style = "background-color:#dfd">void CarAssembler::RunAssembledCar() {</span>
@@ -279,8 +272,8 @@ static void delay(int ms)
         testResult = TEST_FAIL;
     }</span>
     else { 
-<span style = "background-color:#dfd">        if (car-&gt;carEngine-&gt;getEngineID() == BROKEN) {</span>
-<span style = "background-color:#fdd">            printf("¿£ÁøÀÌ °íÀå³ªÀÖ½À´Ï´Ù.\n");
+<span style = "background-color:#dfd">        if (car-&gt;carEngine-&gt;getEngineID() == BROKEN) {
+            printf("¿£ÁøÀÌ °íÀå³ªÀÖ½À´Ï´Ù.\n");
             printf("ÀÚµ¿Â÷°¡ ¿òÁ÷ÀÌÁö ¾Ê½À´Ï´Ù.\n");
             testResult = TEST_FAIL;
         }</span>
@@ -333,11 +326,8 @@ static void delay(int ms)
             TestAssembledCar();
             delay(2000);</span>
         }
-<span style = "background-color:#dfd">        break;</span>
-
-    default:
-<span style = "background-color:#fdd">        printf("Unknown step.");</span>
         break;
+
     }//switch
 <span style = "background-color:#dfd">}</span>
 
@@ -356,12 +346,12 @@ static void delay(int ms)
         if (answer == LOOP_BREAK) {
             break;</span>
 <span style = "background-color:#fdd">        }</span>
-<span style = "background-color:#dfd">        else if (answer == LOOP_CONTINUE) {</span>
-<span style = "background-color:#fdd">            continue;</span>
+<span style = "background-color:#dfd">        else if (answer == LOOP_CONTINUE) {
+            continue;</span>
         }
 
-<span style = "background-color:#dfd">        if (!isValidInput()) {</span>
-<span style = "background-color:#fdd">            printInputHelpMsg();
+<span style = "background-color:#dfd">        if (!isValidInput()) {
+            printInputHelpMsg();
             delay(800);
             continue;</span>
         }
@@ -369,14 +359,14 @@ static void delay(int ms)
         // Ã³À½À¸·Î µ¹¾Æ°¡±â
 <span style = "background-color:#dfd">        if (answer == 0 &amp;&amp; step == Run_Test)</span>
         {
-<span style = "background-color:#fdd">            step = CarType_Q;
+<span style = "background-color:#dfd">            step = CarType_Q;
             continue;</span>
         }
 
         // ÀÌÀüÀ¸·Î µ¹¾Æ°¡±â
 <span style = "background-color:#dfd">        if (answer == 0 &amp;&amp; step &gt;= 1)</span>
         {
-<span style = "background-color:#fdd">            step -= 1;
+<span style = "background-color:#dfd">            step -= 1;
             continue;</span>
         }
 <span style = "background-color:#dfd">        AssembleCar();

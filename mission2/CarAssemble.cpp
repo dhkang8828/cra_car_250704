@@ -95,10 +95,6 @@ void CarAssembler::printMenu() {
         printf("1. RUN\n");
         printf("2. Test\n");
         break;
-
-    default:
-        printf("Unknown Step");
-        break;
     }//switch
 }
 
@@ -114,8 +110,6 @@ bool CarAssembler::isValidInput() {
         return answer >= 0 && answer <= 2;
     case Run_Test:
         return answer >= 0 && answer <= 2;
-    default:
-        return false;
     }//switch
 }
 
@@ -258,7 +252,6 @@ bool CarAssembler::validationCheck() {
         printf("자동차 부품 조합 테스트 결과 : PASS\n");
         return true;
     }
-    return true;
 }
 
 void CarAssembler::RunAssembledCar() {
@@ -324,9 +317,6 @@ void CarAssembler::AssembleCar() {
         }
         break;
 
-    default:
-        printf("Unknown step.");
-        break;
     }//switch
 }
 

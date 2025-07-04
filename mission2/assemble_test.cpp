@@ -304,3 +304,102 @@ TEST_F(CarAssembleTest, RunTestTC12) {
     EXPECT_EQ(testResult, TEST_PASS);
 }
 
+TEST_F(CarAssembleTest, RunTestTC13) {
+
+    EXPECT_CALL(mockInput, getInput())
+        .Times(7)
+        .WillOnce(::testing::Return(const_cast<char*>("8")))    //Type: Sedan, SUV, TRUCK
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Type: Sedan, SUV, TRUCK
+        .WillOnce(::testing::Return(const_cast<char*>("4")))    //Engine: GM, TOYOTA, WIA, BROKEN
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Break: MANDO, CONTINENTAL, BOSHC_B
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Steer:: BOSHC_S, MOBIS
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Test Run: RUN, Test
+        .WillOnce(::testing::Return(const_cast<char*>("exit")));
+
+    CarAssembler assembler(&mockInput);
+    assembler.doAssemble();
+    int testResult = assembler.GetTestResult();
+    EXPECT_EQ(testResult, TEST_FAIL);
+}
+
+TEST_F(CarAssembleTest, RunTestTC14) {
+
+    EXPECT_CALL(mockInput, getInput())
+        .Times(6)
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Type: Sedan, SUV, TRUCK
+        .WillOnce(::testing::Return(const_cast<char*>("4")))    //Engine: GM, TOYOTA, WIA, BROKEN
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Break: MANDO, CONTINENTAL, BOSHC_B
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Steer:: BOSHC_S, MOBIS
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Test Run: RUN, Test
+        .WillOnce(::testing::Return(const_cast<char*>("exit")));
+
+    CarAssembler assembler(&mockInput);
+    assembler.doAssemble();
+    int testResult = assembler.GetTestResult();
+    EXPECT_EQ(testResult, TEST_FAIL);
+}
+
+TEST_F(CarAssembleTest, RunTestTC15) {
+
+    EXPECT_CALL(mockInput, getInput())
+        .Times(11)
+        .WillOnce(::testing::Return(const_cast<char*>("8")))    //Type: Sedan, SUV, TRUCK
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Type: Sedan, SUV, TRUCK
+        .WillOnce(::testing::Return(const_cast<char*>("9")))    //Engine: GM, TOYOTA, WIA, BROKEN
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Engine: GM, TOYOTA, WIA, BROKEN
+        .WillOnce(::testing::Return(const_cast<char*>("9")))    //Break: MANDO, CONTINENTAL, BOSHC_B
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Break: MANDO, CONTINENTAL, BOSHC_B
+        .WillOnce(::testing::Return(const_cast<char*>("9")))    //Steer:: BOSHC_S, MOBIS
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Steer:: BOSHC_S, MOBIS
+        .WillOnce(::testing::Return(const_cast<char*>("9")))    //Test Run: RUN, Test
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Test Run: RUN, Test
+        .WillOnce(::testing::Return(const_cast<char*>("exit")));
+
+    CarAssembler assembler(&mockInput);
+    assembler.doAssemble();
+    int testResult = assembler.GetTestResult();
+    EXPECT_EQ(testResult, TEST_PASS);
+}
+
+TEST_F(CarAssembleTest, RunTestTC16) {
+
+    EXPECT_CALL(mockInput, getInput())
+        .Times(11)
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Type: Sedan, SUV, TRUCK
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Engine: GM, TOYOTA, WIA, BROKEN
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Break: MANDO, CONTINENTAL, BOSHC_B
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Steer:: BOSHC_S, MOBIS
+        .WillOnce(::testing::Return(const_cast<char*>("0")))    //Test Run: RUN, Test
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Type: Sedan, SUV, TRUCK
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Engine: GM, TOYOTA, WIA, BROKEN
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Break: MANDO, CONTINENTAL, BOSHC_B
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Steer:: BOSHC_S, MOBIS
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Test Run: RUN, Test
+        .WillOnce(::testing::Return(const_cast<char*>("exit")));
+
+    CarAssembler assembler(&mockInput);
+    assembler.doAssemble();
+    int testResult = assembler.GetTestResult();
+    EXPECT_EQ(testResult, TEST_PASS);
+}
+
+TEST_F(CarAssembleTest, RunTestTC17) {
+
+    EXPECT_CALL(mockInput, getInput())
+        .Times(8)
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Type: Sedan, SUV, TRUCK
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Engine: GM, TOYOTA, WIA, BROKEN
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Break: MANDO, CONTINENTAL, BOSHC_B
+        .WillOnce(::testing::Return(const_cast<char*>("0")))    //Steer:: BOSHC_S, MOBIS
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Break: MANDO, CONTINENTAL, BOSHC_B
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Steer:: BOSHC_S, MOBIS
+        .WillOnce(::testing::Return(const_cast<char*>("1")))    //Test Run: RUN, Test
+        .WillOnce(::testing::Return(const_cast<char*>("exit")));
+
+    CarAssembler assembler(&mockInput);
+    assembler.doAssemble();
+    int testResult = assembler.GetTestResult();
+    EXPECT_EQ(testResult, TEST_PASS);
+}
+
+
