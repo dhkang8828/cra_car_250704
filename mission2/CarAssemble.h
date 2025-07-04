@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include "type.h"
 using namespace std;
 
 class ICarType {
@@ -121,10 +122,16 @@ public:
 	}
 };
 
-class CarAssmbler
+class CarAssembler
 {
 public:
+	CarAssembler() : step(0), answer(0) {}
+	void printMenu();
+	int CheckInputException();
+	void doAssemble(); 
+	bool isValidInput();
+	void printInputHelpMsg();
 	int step;
-
+	int answer;
 };
 
